@@ -1,0 +1,22 @@
+%ul
+  - @users.each_with_index do |user, index|
+    %li
+      %p= index
+      %p= user.first_name
+      %p= user.last_name
+
+= search_form_for @search do |f|
+
+  = f.fields_for :q do
+    = f.grouping_fields do |g|
+      = g.hidden_field :m, value: :and
+      = g.condition_fields do |c|
+        = c.attribute_fields do |a|
+          =# a.attribute_select associations: %w(posts)
+          = a.hidden_field :name, value: :posts_id
+        = c.hidden_field :p, value: :in_any
+        =# c.predicate_select
+        = c.value_fields do |v|
+          = v.text_field :value
+
+    = f.submit 'Search'
